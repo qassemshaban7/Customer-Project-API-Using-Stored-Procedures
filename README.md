@@ -1,7 +1,7 @@
 # Customer Project API - Stored Procedures Only
 
 ## 📌 Overview
-This API is designed to manage **Customers**, **Projects**, and their relationships using **Stored Procedures** in SQL Server. The API follows a structured versioning approach (`v1`, `v2`) to ensure maintainability and compatibility for future enhancements.
+This API is designed to manage **Customers**, **Projects**, and their relationships using **Stored Procedures** in SQL Server.
 
 The project uses:
 - **ASP.NET Core 8 Web API**
@@ -11,31 +11,6 @@ The project uses:
 - **JWT Authentication for security**
 
 ---
-
-## 🛠️ Setup & Installation
-
-### 1️⃣ Clone the repository:
-```sh
-git clone https://github.com/your-repo/customer-project-api.git
-cd customer-project-api
-```
-
-### 2️⃣ Configure the database connection:
-Update the **`appsettings.json`** file with your SQL Server connection string:
-```json
-"ConnectionStrings": {
-  "DefaultConnection": "Server=YOUR_SERVER;Database=YOUR_DATABASE;User Id=YOUR_USER;Password=YOUR_PASSWORD;"
-}
-```
-
-### 3️⃣ Run Database Migrations (if applicable):
-```sh
-dotnet ef database update
-```
-
-### 4️⃣ Run the application:
-```sh
-dotnet run
 ```
 The API will be available at: **`http://localhost:5000`** (or the port configured in `launchSettings.json`).
 
