@@ -1,7 +1,7 @@
 # Customer Project API - Work With Stored Procedures Only
 
 ## 📌 Overview
-This API is designed to manage **Customers**, **Projects**, and their relationships using **Stored Procedures** in SQL Server.
+This API is designed to manage **Customers**, **Projects**, and their relationships using **Stored Procedures** in SQL Server. The API interacts **exclusively** with stored procedures and does not interact with database tables directly.
 
 The project uses:
 - **ASP.NET Core 8 Web API**
@@ -68,7 +68,7 @@ CREATE TABLE CustomerProjects (
 );
 ```
 
-### 🔹 Stored Procedures
+### 🔹 Stored Procedures (Used for All Database Operations)
 
 #### 📌 Add a Department
 ```sql
