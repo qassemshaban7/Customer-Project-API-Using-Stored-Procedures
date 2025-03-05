@@ -12,17 +12,9 @@ The project uses:
 
 ---
 ```
-The API will be available at: **`http://localhost:5000`** (or the port configured in `launchSettings.json`).
-
 ---
 
 ## 🚀 API Endpoints
-
-### 🔹 Versioning Support (v1 & v2)
-The API follows versioning using **Route Versioning (`v{version:apiVersion}`)**:
-- `v1`: Basic functionality
-- `v2`: Future enhancements
-
 ### 🔹 Customers API
 | Method | Endpoint | Description |
 |--------|-------------|------------------|
