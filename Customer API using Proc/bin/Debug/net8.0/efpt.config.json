@@ -1,0 +1,77 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "DBContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": true,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "Company",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[AddCustomer]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[AddCustomerToProject]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[AddDepartment]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[AddProject]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[DeleteCustomer]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[GetAllCustomerProjectsData]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[GetCustomerLogin]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[UpdateCustomer]",
+         "ObjectType": 1
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseInternalAccessModifiersForSprocsAndFunctions": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false
+}
