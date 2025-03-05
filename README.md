@@ -11,8 +11,6 @@ The project uses:
 - **JWT Authentication for security**
 
 ---
-```
----
 
 ## 🚀 API Endpoints
 ### 🔹 Customers API
@@ -72,6 +70,22 @@ CREATE TABLE CustomerProjects (
 
 ### 🔹 Stored Procedures
 
+#### 📌 Add a Department
+```sql
+CREATE PROCEDURE AddDepartment
+    @Name NVARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Departments (Name)
+    VALUES (@Name);
+
+    SELECT Name FROM Departments WHERE Name = @Name;
+END;
+GO
+```
+
 #### 📌 Add a New Customer
 ```sql
 CREATE OR ALTER PROCEDURE AddCustomer
@@ -81,29 +95,65 @@ CREATE OR ALTER PROCEDURE AddCustomer
     @DeptId INT
 AS
 BEGIN
+    SET NOCOUNT ON;
+
     INSERT INTO Customers (Name, Salary, Password, DeptId)
     VALUES (@Name, @Salary, @Password, @DeptId);
 
-    SELECT SCOPE_IDENTITY() AS CustomerId;
+    DECLARE @NewCustomerId INT = SCOPE_IDENTITY();
+
+    (SELECT CustomerId, Name, Password, DeptId 
+    FROM Customers 
+    WHERE CustomerId = @NewCustomerId);
 END;
+GO
+```
+
+#### 📌 Get Customer Login
+```sql
+CREATE PROCEDURE GetCustomerLogin
+    @Name NVARCHAR(100),
+    @Password NVARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT CustomerId, Name
+    FROM Customers
+    WHERE Name = @Name AND Password = @Password;
+END;
+GO
 ```
 
 #### 📌 Update a Customer
 ```sql
 CREATE OR ALTER PROCEDURE UpdateCustomer
     @CustomerId INT,
-    @Name NVARCHAR(100),
-    @Salary DECIMAL(18,2),
-    @Password NVARCHAR(50),
-    @DeptId INT
+    @Name NVARCHAR(100) = NULL,
+    @Salary DECIMAL(18, 2) = NULL,
+    @Password NVARCHAR(50) = NULL,
+    @DeptId INT = NULL
 AS
 BEGIN
+    SET NOCOUNT ON;
+
+    IF NOT EXISTS (SELECT 1 FROM Customers WHERE CustomerId = @CustomerId)
+    BEGIN
+        SELECT -1 AS ReturnValue;
+        RETURN;
+    END
+
     UPDATE Customers
-    SET Name = @Name, Salary = @Salary, Password = @Password, DeptId = @DeptId
+    SET 
+        Name = ISNULL(@Name, Name),
+        Salary = ISNULL(@Salary, Salary),
+        Password = ISNULL(@Password, Password),
+        DeptId = ISNULL(@DeptId, DeptId)
     WHERE CustomerId = @CustomerId;
 
     SELECT 1 AS ReturnValue;
 END;
+GO
 ```
 
 #### 📌 Delete a Customer
@@ -112,70 +162,97 @@ CREATE OR ALTER PROCEDURE DeleteCustomer
     @CustomerId INT
 AS
 BEGIN
+    SET NOCOUNT ON;
+
     IF NOT EXISTS (SELECT 1 FROM Customers WHERE CustomerId = @CustomerId)
     BEGIN
-        SELECT -1 AS ReturnValue;
-        RETURN;
+        RETURN -1;
     END
 
-    DELETE FROM Customers WHERE CustomerId = @CustomerId;
-    SELECT 1 AS ReturnValue;
+    DELETE FROM Customers
+    WHERE CustomerId = @CustomerId;
+
+    RETURN 1;
 END;
+GO
 ```
 
-#### 📌 Get Customers with Departments
+#### 📌 Add a Project
 ```sql
-CREATE OR ALTER PROCEDURE GetCustomersWithDepartments
+CREATE OR ALTER PROCEDURE AddProject
+    @Name NVARCHAR(100),
+    @Description NVARCHAR(MAX)
 AS
 BEGIN
-    SELECT c.CustomerId, c.Name, c.Salary, d.Name AS DepartmentName
-    FROM Customers c
-    INNER JOIN Departments d ON c.DeptId = d.DeptId;
+    SET NOCOUNT ON;
+
+    INSERT INTO Projects (Name, Description)
+    VALUES (@Name, @Description);
+
+    DECLARE @NewProId INT = SCOPE_IDENTITY();
+
+    (SELECT * FROM Projects
+     WHERE ProjectId = @NewProId);
 END;
+GO
 ```
 
----
+#### 📌 Assign a Project to a Customer
+```sql
+CREATE OR ALTER PROCEDURE AddCustomerToProject
+    @CustomerId INT,
+    @ProjectId INT,
+    @ActualReturnValue INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
 
-## 📜 Swagger Documentation
-This API uses **Swagger** for documentation.
+    BEGIN TRY
+        IF EXISTS (
+            SELECT 1 FROM CustomerProjects 
+            WHERE CustomerId = @CustomerId AND ProjectId = @ProjectId
+        )
+        BEGIN
+            SET @ActualReturnValue = -1;
+            RETURN;
+        END
 
-### 🔹 Enable Swagger UI
-Swagger is available at:
-- **`http://localhost:5000/swagger`**
+        INSERT INTO CustomerProjects (CustomerId, ProjectId)
+        VALUES (@CustomerId, @ProjectId);
 
-### 🔹 Multi-Version Support in Swagger
-In `Program.cs`, Swagger is configured for **v1 & v2**:
-```csharp
-app.UseSwaggerUI(options =>
-{
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Customer Project API v1");
-    options.SwaggerEndpoint("/swagger/v2/swagger.json", "Customer Project API v2");
-});
+        SET @ActualReturnValue = 1;
+    END TRY
+    BEGIN CATCH
+        SET @ActualReturnValue = 0;
+    END CATCH
+END;
+GO
 ```
 
----
+#### 📌 Get All Customer Projects Data
+```sql
+CREATE OR ALTER PROCEDURE GetAllCustomerProjectsData
+AS
+BEGIN
+    SET NOCOUNT ON;
 
-## 🔐 Authentication & Security
-This API uses **JWT Authentication**. Each request requires a valid token in the **Authorization Header**:
-```http
-Authorization: Bearer {your-token-here}
+    SELECT 
+        c.CustomerId, 
+        c.Name AS CustomerName, 
+        c.Salary, 
+        c.Password, 
+        d.DeptId, 
+        d.Name AS DepartmentName,
+        p.ProjectId, 
+        p.Name AS ProjectName, 
+        p.Description AS ProjectDescription
+    FROM Customers c
+    INNER JOIN Departments d ON c.DeptId = d.DeptId
+    LEFT JOIN CustomerProjects cp ON c.CustomerId = cp.CustomerId
+    LEFT JOIN Projects p ON cp.ProjectId = p.ProjectId;
+END;
+GO
 ```
-
-To generate a token, send a `POST` request to:
-```http
-POST /api/v1/auth/login
-```
-with the following JSON body:
-```json
-{
-  "username": "admin",
-  "password": "password123"
-}
-```
----
-
-## 📬 Contributing
-Feel free to fork this repository, submit issues, or create pull requests to improve the project. 🙌
 
 ---
 
