@@ -1,4 +1,4 @@
-# Customer Project API - Stored Procedures Only
+# Customer Project API - Work With Stored Procedures Only
 
 ## 📌 Overview
 This API is designed to manage **Customers**, **Projects**, and their relationships using **Stored Procedures** in SQL Server.
